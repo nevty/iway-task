@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 import {connect} from "react-redux";
 import {Controller, useForm} from "react-hook-form";
-import {makeStyles, Button, Typography, Grid} from "@material-ui/core";
+import {makeStyles, Button, Typography, Grid, CircularProgress} from "@material-ui/core";
 import {ErrorCodeEnum, LoginDataType} from "../../types/types";
 import {AppStateType} from '../../redux/store';
 import {loginRequest} from '../../redux/user-reducer';
 import {UserLoginResponseType} from '../../api/api';
 import { renderTextField } from '../FormComponents/FormComponents';
+import {BrowserHistory} from "history";
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -21,7 +22,19 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const LoginForm: React.FC<MapDispatchPropsType> = ({login}) => {
+type OwnPropsType = {
+    history: BrowserHistory
+}
+
+type MapDispatchPropsType = {
+    login: (data: LoginDataType) => Promise<UserLoginResponseType>
+}
+
+type MapStateToPropsType = {
+    isFetching: boolean
+}
+
+const LoginForm: React.FC<MapDispatchPropsType & MapStateToPropsType & OwnPropsType> = ({login,history,isFetching}) => {
     const classes = useStyles();
     const [message, setMessage] = useState('');
     let defaultValues = {
@@ -39,6 +52,7 @@ const LoginForm: React.FC<MapDispatchPropsType> = ({login}) => {
                 if (response.error && (response.error.status === ErrorCodeEnum.wrongAuthStatus)) {
                     setMessage("Неверный пароль или логин")
                 }
+                if (response.result && response.result.token) history.push('/')
                 return response
             })
             .catch(error => console.log(error));
@@ -61,23 +75,25 @@ const LoginForm: React.FC<MapDispatchPropsType> = ({login}) => {
                     <Controller as={renderTextField} control={control} label="Password"
                                 rules={{required: true}} type="password"
                                 name="password" margin="normal" variant="outlined"/>
-                    <Button
-                        type="submit" fullWidth
-                        variant="contained" color="primary"
-                        disabled={!formState.isValid}
-                        className={classes.submit}
-                    >
-                        Log in
-                    </Button>
+                    {
+                        (!isFetching && <Button
+                            type="submit" fullWidth
+                            variant="contained" color="primary"
+                            disabled={!formState.isValid}
+                            className={classes.submit}
+                        >
+                            Log in
+                        </Button>) || <CircularProgress/>
+                    }
                 </form>
             </Grid>
         </Grid>
     )
 }
 
-type MapDispatchPropsType = {
-    login: (data: LoginDataType) => Promise<UserLoginResponseType>
-}
+let mapStateToProps = (state: AppStateType):MapStateToPropsType => ({
+    isFetching: state.userState.isFetching
+})
 
 let mapDispatchToProps = (dispatch: any): MapDispatchPropsType => ({
     login: (data) => {
@@ -85,4 +101,4 @@ let mapDispatchToProps = (dispatch: any): MapDispatchPropsType => ({
     }
 })
 
-export default connect((state: AppStateType) => ({}), mapDispatchToProps)(LoginForm)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
