@@ -9,15 +9,18 @@ const initialState = {
 }
 
 export type initialStateType = typeof initialState;
-
+enum ActionTypeEnum {
+    setAuth="login-reducer/SET_LOGIN_AUTH",
+    setIsFetching="login-reducer/SET_IS_FETCHING"
+}
 const userReducer = (state = initialState, action: ActionTypes): initialStateType => {
     switch (action.type) {
-        case "login-reducer/SET_LOGIN_AUTH":
+        case ActionTypeEnum.setAuth:
             return {
                 ...state,
                 isAuth: action.boolean,
             }
-        case "login-reducer/SET_IS_FETCHING":
+        case ActionTypeEnum.setIsFetching:
             return {
                 ...state,
                 isFetching: action.boolean
@@ -28,8 +31,8 @@ const userReducer = (state = initialState, action: ActionTypes): initialStateTyp
 };
 
 export const userActions = {
-    setAuth: (boolean: boolean) => ({type: "login-reducer/SET_LOGIN_AUTH", boolean} as const),
-    setIsFetching: (boolean:boolean)=>({type: "login-reducer/SET_IS_FETCHING",boolean} as const)
+    setAuth: (boolean: boolean) => ({type: ActionTypeEnum.setAuth, boolean} as const),
+    setIsFetching: (boolean:boolean)=>({type: ActionTypeEnum.setIsFetching,boolean} as const)
 };
 
 export type ActionTypes = InferActionTypes<typeof userActions>
@@ -41,13 +44,13 @@ export const loginRequest = (reqData: LoginDataType): ThunkType => (dispatch: Th
     dispatch(userActions.setIsFetching(true));
     return usersAPI.login(reqData)
         .then((response) => {
-            sessionStorage.setItem('Authorization', `bearer ${response.data.result && response.data.result.token}`);
+            sessionStorage.setItem('Authorization', `bearer ${response.result && response.result.token}`);
             dispatch(userActions.setAuth(true));
             dispatch(userActions.setIsFetching(false));
-            return response.data
+            return response
         }, error => {
             dispatch(userActions.setIsFetching(false));
-            return error.response.data
+            return error.response
         })
 }
 
