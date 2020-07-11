@@ -29,8 +29,8 @@ export type UserLoginResponseType = {
 }
 
 export const tripsAPI = {
-    getTrips(token:ReturnType<GetTokenType>) {
-        return instance.get<GetTripsResponseType>('v3/orders/trips',{
+    getTrips(token:ReturnType<GetTokenType>,page:number) {
+        return instance.get<GetTripsResponseType>(`v3/orders/trips?page=${page}`,{
             headers: {
                 'content-type': 'application/json',
                 'Authorization': `Bearer ${token}`

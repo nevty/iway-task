@@ -48,10 +48,10 @@ export type ActionTypes = InferActionTypes<typeof tripsActions>
 export type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
 export type ThunkDispatchType = ThunkDispatch<AppStateType, unknown, ActionTypes>
 
-export const getTripsRequest = (): ThunkType => (dispatch:ThunkDispatchType) => {
+export const getTripsRequest = (page = 1): ThunkType => (dispatch:ThunkDispatchType) => {
     dispatch(tripsActions.setIsFetching(true));
     const token: ReturnType<GetTokenType> = getToken();
-    return tripsAPI.getTrips(token)
+    return tripsAPI.getTrips(token,page)
         .then(response => {
             if (response.result && response.result.orders) dispatch(tripsActions.setTrips(response.result.orders));
             dispatch(tripsActions.setIsFetching(false));

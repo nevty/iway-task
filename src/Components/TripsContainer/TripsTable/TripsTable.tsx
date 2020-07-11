@@ -80,7 +80,7 @@ const Row: React.FC<RowPropsType> = ({row}) => {
                                         'Транспорт',
                                         'Цена'
                                     ].map(value => (
-                                        <TableCell>
+                                        <TableCell key={value}>
                                             {value}
                                         </TableCell>
                                     ))}

@@ -8,7 +8,7 @@ import { CircularProgress } from "@material-ui/core";
 import TripsTable from "./TripsTable/TripsTable";
 
 type MapDispatchPropsType = {
-    getTrips: () => Promise<GetTripsResponseType>
+    getTrips: (page?:number) => Promise<GetTripsResponseType>
 }
 
 type MapStateToPropsType = {
@@ -20,8 +20,8 @@ type OwnPropsType = {
 }
 
 const TripsContainer: React.FC<MapStateToPropsType & MapDispatchPropsType & OwnPropsType> = ({getTrips, isTripsFetching, trips,redirect}) => {
-    async function makeRequest<ReturnType>(request:()=>Promise<ReturnType>){
-        return request();
+    async function makeRequest<ReturnType>(request:(args:any)=>Promise<ReturnType>,...args:any){
+        return request.apply(null,args);
     }
     //Выносим асихронный запрос за хук
 
@@ -47,8 +47,8 @@ let mapStateToProps = (state: AppStateType): MapStateToPropsType => ({
 })
 
 let mapDispatchToProps = (dispatch: any): MapDispatchPropsType => ({
-    getTrips: () => {
-        return dispatch(getTripsRequest())
+    getTrips: (page) => {
+        return dispatch(getTripsRequest(page))
     }
 })
 
