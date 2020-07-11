@@ -38,13 +38,13 @@ export const userActions = {
 export type ActionTypes = InferActionTypes<typeof userActions>
 // Определяем payload и тип акшенов внутри userActions
 export type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
-export type ThinkDispatchType = ThunkDispatch<AppStateType, unknown, ActionTypes>
+export type ThunkDispatchType = ThunkDispatch<AppStateType, unknown, ActionTypes>
 
-export const loginRequest = (reqData: LoginDataType): ThunkType => (dispatch: ThinkDispatchType) => {
+export const loginRequest = (reqData: LoginDataType): ThunkType => (dispatch: ThunkDispatchType) => {
     dispatch(userActions.setIsFetching(true));
     return usersAPI.login(reqData)
         .then((response) => {
-            sessionStorage.setItem('Authorization', `bearer ${response.result && response.result.token}`);
+            localStorage.setItem('Authorization', `bearer ${response.result && response.result.token}`);
             dispatch(userActions.setAuth(true));
             dispatch(userActions.setIsFetching(false));
             return response

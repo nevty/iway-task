@@ -1,8 +1,8 @@
 import axios from "axios"
 import {ErrorCodeEnum, LoginDataType, TripType} from "../types/types";
-import {GetTokenType} from "../utils/sessionStorage";
+import {GetTokenType} from "../utils/localStorage";
 
-const baseURL = 'http://transstage1.iwayex.com/transnextgen';
+const baseURL = 'https://cors-anywhere.herokuapp.com/http://transstage1.iwayex.com/transnextgen';
 
 const instance = axios.create({
     baseURL
@@ -18,14 +18,14 @@ export const usersAPI = {
 }
 
 export type UserLoginResponseType = {
-    result: { token: string } | null,
-    error: {
+    result?: { token: string },
+    error?: {
         name: string,
         message: string,
         code: number,
         status: ErrorCodeEnum,
         type: string
-    } | null
+    }
 }
 
 export const tripsAPI = {
@@ -41,7 +41,7 @@ export const tripsAPI = {
 }
 
 export type GetTripsResponseType = {
-    result: {
+    result?: {
         orders: Array<TripType>,
         page_data: {
             page: number,
@@ -50,11 +50,11 @@ export type GetTripsResponseType = {
             page_count: number
         }
     },
-    error: {
+    error?: {
         name: string,
         message: string,
         code: number,
         status: ErrorCodeEnum,
         type: string
-    } | null
+    }
 }

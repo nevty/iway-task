@@ -2,7 +2,7 @@ import {InferActionTypes, TripType} from "../types/types";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {AppStateType} from "./store";
 import {tripsAPI} from "../api/api";
-import {getToken, GetTokenType} from "../utils/sessionStorage";
+import {getToken, GetTokenType} from "../utils/localStorage";
 
 const initialState = {
     trips: [] as Array<TripType>,
@@ -46,9 +46,9 @@ export const tripsActions = {
 
 export type ActionTypes = InferActionTypes<typeof tripsActions>
 export type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
-export type ThinkDispatchType = ThunkDispatch<AppStateType, unknown, ActionTypes>
+export type ThunkDispatchType = ThunkDispatch<AppStateType, unknown, ActionTypes>
 
-export const getTripsRequest = (): ThunkType => (dispatch) => {
+export const getTripsRequest = (): ThunkType => (dispatch:ThunkDispatchType) => {
     dispatch(tripsActions.setIsFetching(true));
     const token: ReturnType<GetTokenType> = getToken();
     return tripsAPI.getTrips(token)

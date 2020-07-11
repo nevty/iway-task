@@ -18,11 +18,13 @@ type Passenger = {
 }
 
 export type TripType = {
+    order_id: number,
     passengers: Array<Passenger>
     status: number,
+    date_arrival: string,
+    date_departure: string,
     location_address: string,
     destination_address: string,
-    duration: number,
     booker_number: string,
     car_data: {
         car_class_id: number,
@@ -30,6 +32,7 @@ export type TripType = {
         models: string,
         capacity: number
     },
+    currency: string,
     price: {
         price_id: number,
         price: number,

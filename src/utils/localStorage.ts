@@ -1,5 +1,5 @@
 export const getToken:GetTokenType = () =>{
-    let token = sessionStorage.getItem('Authorization');
+    let token = localStorage.getItem('Authorization');
     if (token) {
         return token.split(' ')[1];
     }
