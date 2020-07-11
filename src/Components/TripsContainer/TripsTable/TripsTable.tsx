@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { isMobile } from "../../../utils/media";
 
 type OwnPropsType = {
     trips: Array<TripType>
@@ -24,11 +25,10 @@ const mapFlatValueToCell = [
 ]
 //Для упрощения отрисовки сопостовляем название и ключ-значение поездки
 
-const isMobile = window.innerWidth > 767;
 
 const TripsTable: React.FC<OwnPropsType> = ({trips}) => (
-    <Table size={isMobile ? "small" : "medium"}
-           padding={isMobile ? "default" : "none"}>
+    <Table size="medium"
+           padding={isMobile ? "none" : "default"}>
         <TableHead>
             <TableRow>
                 {mapFlatValueToCell.map(({title}, index) => (
@@ -71,7 +71,7 @@ const Row: React.FC<RowPropsType> = ({row}) => {
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Table size="small" aria-label="purchases"
-                               padding={isMobile ? "default" : "none"}
+                               padding={isMobile ? "none" : "default"}
                         >
                             <TableHead>
                                 <TableRow>

@@ -1,7 +1,7 @@
 import {InferActionTypes, TripType} from "../types/types";
 import {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {AppStateType} from "./store";
-import {tripsAPI} from "../api/api";
+import {tripsAPI, PageDataType} from "../api/api";
 import {getToken, GetTokenType} from "../utils/localStorage";
 
 const initialState = {
@@ -19,7 +19,8 @@ export type initialStateType = typeof initialState;
 
 enum ActionTypeEnum {
     setTrips = "trips-reducer/SET_TRIPS",
-    setIsFetching = "trips-reducer/SET_IS_FETCHING"
+    setIsFetching = "trips-reducer/SET_IS_FETCHING",
+    setPageData = "trips-reducer/SET_PAGE_DATA"
 }
 
 const tripsReducer = (state = initialState, action: ActionTypes): initialStateType => {
@@ -34,6 +35,11 @@ const tripsReducer = (state = initialState, action: ActionTypes): initialStateTy
                 ...state,
                 isFetching: action.boolean
             }
+        case ActionTypeEnum.setPageData:
+            return {
+                ...state,
+                page_data: action.payload
+            }
         default:
             return state;
     }
@@ -41,7 +47,8 @@ const tripsReducer = (state = initialState, action: ActionTypes): initialStateTy
 
 export const tripsActions = {
     setTrips: (payload: Array<TripType>) => ({type: ActionTypeEnum.setTrips, payload} as const),
-    setIsFetching: (boolean: boolean) => ({type: ActionTypeEnum.setIsFetching, boolean} as const)
+    setIsFetching: (boolean: boolean) => ({type: ActionTypeEnum.setIsFetching, boolean} as const),
+    setPageData: (payload:PageDataType)=>({type:ActionTypeEnum.setPageData,payload} as const)
 }
 
 export type ActionTypes = InferActionTypes<typeof tripsActions>
@@ -53,7 +60,10 @@ export const getTripsRequest = (page = 1): ThunkType => (dispatch:ThunkDispatchT
     const token: ReturnType<GetTokenType> = getToken();
     return tripsAPI.getTrips(token,page)
         .then(response => {
-            if (response.result && response.result.orders) dispatch(tripsActions.setTrips(response.result.orders));
+            if (response.result && response.result.orders) {
+                dispatch(tripsActions.setTrips(response.result.orders));
+                dispatch(tripsActions.setPageData(response.result.page_data))
+            }
             dispatch(tripsActions.setIsFetching(false));
             return response
         })

@@ -43,12 +43,7 @@ export const tripsAPI = {
 export type GetTripsResponseType = {
     result?: {
         orders: Array<TripType>,
-        page_data: {
-            page: number,
-            items_on_page: number,
-            total_items: number,
-            page_count: number
-        }
+        page_data: PageDataType
     },
     error?: {
         name: string,
@@ -57,4 +52,12 @@ export type GetTripsResponseType = {
         status: ErrorCodeEnum,
         type: string
     }
+}
+
+
+export type PageDataType = {
+    page: number,
+    items_on_page: number,
+    total_items: number,
+    page_count: number
 }
