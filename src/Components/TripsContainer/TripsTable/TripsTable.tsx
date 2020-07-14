@@ -1,42 +1,33 @@
-import React from "react";
+import React, {memo} from "react";
 import {TripType} from "../../../types/types";
 import {
-    TableRow,
-    TableCell,
-    Table,
-    TableHead,
-    TableBody,
-    IconButton,
-    Collapse
+    Table, TableBody, TableHead,
+    TableRow, TableCell,
+    Collapse,
+    IconButton
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { isMobile } from "../../../utils/media";
+import {isMobile} from "../../../utils/media";
+
+const containerStyle = {marginTop:"30px",marginBottom:"30px"};
 
 type OwnPropsType = {
     trips: Array<TripType>
 }
-
-const mapFlatValueToCell = [
-    {title: 'Отправление', key: 'location_address' as keyof TripType},
-    {title: 'Дата', key: 'date_departure' as keyof TripType},
-    {title: 'Прибытие', key: 'destination_address' as keyof TripType},
-    {title: 'Дата', key: 'date_arrival' as keyof TripType},
-]
-//Для упрощения отрисовки сопостовляем название и ключ-значение поездки
-
-
-const TripsTable: React.FC<OwnPropsType> = ({trips}) => (
+const TripsTable: React.FC<OwnPropsType> = memo(({trips}) => (
     <Table size="medium"
-           padding={isMobile ? "none" : "default"}>
+           padding={isMobile ? "none" : "default"}
+           style={containerStyle}
+    >
         <TableHead>
             <TableRow>
-                {mapFlatValueToCell.map(({title}, index) => (
-                    <TableCell key={title + index}>
+                {['Пассажиры', 'Статус'].map(title => (
+                    <TableCell key={title}>
                         {title}
                     </TableCell>
                 ))}
-                <TableCell />
+                <TableCell/>
             </TableRow>
         </TableHead>
         <TableBody>
@@ -45,22 +36,25 @@ const TripsTable: React.FC<OwnPropsType> = ({trips}) => (
             }
         </TableBody>
     </Table>
-)
+));
+
+
+const cellStyle = {paddingBottom: 0, paddingTop: 0};
 
 type RowPropsType = {
     row: TripType
 }
-
 const Row: React.FC<RowPropsType> = ({row}) => {
     const [open, setOpen] = React.useState(false);
     return (
         <>
             <TableRow>
-                {mapFlatValueToCell.map(({key}) => (
-                    <TableCell key={key} component="th" scope="row">
-                        {row[key]}
-                    </TableCell>
-                ))}
+                <TableCell component="th" scope="row">
+                    {row.passengers.map(p=>`${p.name} ${p.phone}`)}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                    {row.status}
+                </TableCell>
                 <TableCell>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
@@ -68,7 +62,7 @@ const Row: React.FC<RowPropsType> = ({row}) => {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+                <TableCell style={cellStyle} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Table size="small" aria-label="purchases"
                                padding={isMobile ? "none" : "default"}
@@ -105,6 +99,6 @@ const Row: React.FC<RowPropsType> = ({row}) => {
             </TableRow>
         </>
     )
-}
+};
 
 export default TripsTable
