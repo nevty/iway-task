@@ -3,6 +3,7 @@ import {ErrorCodeEnum, LoginDataType, TripType} from "../types/types";
 import {GetTokenType} from "../utils/localStorage";
 
 const baseURL = 'https://cors-anywhere.herokuapp.com/http://transstage1.iwayex.com/transnextgen';
+//проксирование запроса
 
 const instance = axios.create({
     baseURL

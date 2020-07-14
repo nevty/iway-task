@@ -45,11 +45,12 @@ const useStyles = makeStyles(theme => ({
 const TripsContainer: React.FC<MapStateToPropsType & MapDispatchPropsType & OwnPropsType> = ({getTrips, isTripsFetching, trips, pageData, redirect}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageChange = (e: React.ChangeEvent<unknown>, page: number) => setCurrentPage(page);
+    //модель пагинации
 
     async function makeRequest<ReturnType>(request: (args: any) => Promise<ReturnType>, ...args: any) {
         return request.apply(null, args);
     }
-    //Выносим асихронный запрос за хук
+    //выносим асихронный запрос за хук
     useEffect(() => {
         makeRequest<GetTripsResponseType>(getTrips, currentPage)
             .then(resp => {

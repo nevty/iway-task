@@ -52,6 +52,7 @@ export const tripsActions = {
 }
 
 export type ActionTypes = InferActionTypes<typeof tripsActions>
+// Определяем payload и тип акшенов внутри tripsActions
 export type ThunkType = ThunkAction<void, AppStateType, unknown, ActionTypes>
 export type ThunkDispatchType = ThunkDispatch<AppStateType, unknown, ActionTypes>
 

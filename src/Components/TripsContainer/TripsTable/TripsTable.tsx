@@ -10,7 +10,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {isMobile} from "../../../utils/media";
 
-const containerStyle = {marginTop:"30px",marginBottom:"30px"};
+const containerStyle = {marginTop: "30px", marginBottom: "30px"};
 
 type OwnPropsType = {
     trips: Array<TripType>
@@ -50,7 +50,7 @@ const Row: React.FC<RowPropsType> = ({row}) => {
         <>
             <TableRow>
                 <TableCell component="th" scope="row">
-                    {row.passengers.map(p=>`${p.name} ${p.phone}`)}
+                    {row.passengers.map((p, index) => `${p.name} ${p.phone}${index === row.passengers.length - 1 ? "" : ", "}`)}
                 </TableCell>
                 <TableCell component="th" scope="row">
                     {row.status}
