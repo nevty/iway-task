@@ -1,15 +1,17 @@
 import React, {lazy, Suspense} from 'react';
-import './App.css';
 import {BrowserRouter, Switch, Route} from "react-router-dom";
-import LoginForm from "./Components/LoginForm/LoginForm";
+import {CircularProgress} from "@material-ui/core";
+import Home from "./pages/Home";
+import './App.css';
 
-const Home = lazy(() => import("./pages/Home"));
+const LoginForm = lazy(() => import("./Components/LoginForm/LoginForm"));
+const progressStyle = {height: "100vh",display:"flex",flexDirection:"column",justifyContent:"center",alignItems: "center"};
 
 function App({history}) {
   return (
     <div className="App">
         <BrowserRouter>
-            <Suspense fallback={<div>...Загрузка</div>}>
+            <Suspense fallback={<div style={progressStyle}><CircularProgress/></div>}>
                 <Switch>
                     <Route path="/login" exact history={history} component={LoginForm}/>
                     <Route path="/" exact history={history} component={Home}/>
